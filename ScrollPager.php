@@ -318,11 +318,9 @@ class ScrollPager extends Widget
             'negativeMargin' => $this->negativeMargin
         ]);
         $initString = empty($this->overflowContainer)
-            ? "if(typeof window.{$this->id}_ias === 'object') { window.{$this->id}_ias.reinitialize() }
-             else { window.{$this->id}_ias = jQuery.ias({$pluginSettings}); };"
-            : "if(typeof window.{$this->id}_ias === 'object') { window.{$this->id}_ias.reinitialize() }
-             else { window.{$this->id}_ias = jQuery('{$this->overflowContainer}').ias({$pluginSettings}); };";
-        $this->view->registerJs($initString, View::POS_READY, "{$this->id}_ias_main");
+            ? "window.{$this->id}_ias = jQuery.ias({$pluginSettings});"
+            : "window.{$this->id}_ias = jQuery('{$this->overflowContainer}').ias({$pluginSettings});";
+        $this->view->registerJs("function ias() {{$initString}}; ias();", View::POS_READY, "{$this->id}_ias_main");
 
         // Register IAS extensions
         $this->registerExtensions([
